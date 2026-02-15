@@ -3,7 +3,7 @@ import Note from '../models/Note.js';
 export async function listNotes(req, res) {
     try {
         const all_notes = await Note.find({ userId: 'temp-user-id' }).sort({ createdAt: -1 }); // find all notes for the user and sort by creation date (newest first)
-        res.render('index', { notes: all_notes });
+        res.render('notes/index', { notes: all_notes });
     } catch (error) {
         console.error('Error fetching notes:', error);
         res.status(500).send('Failed to fetch notes');

@@ -9,6 +9,7 @@ import noteRoutes from './routes/noteRoutes.js';
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // View engine
 app.set('view engine', 'ejs');
@@ -22,9 +23,13 @@ app.use(cors());
 // Routes
 app.use('/notes', noteRoutes);
 
+app.get('/', (req, res) => { 
+  res.redirect('/notes'); // redirect base URL to notes list page
+});
+
 
 await connectDB(process.env.MONGO_URI);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
