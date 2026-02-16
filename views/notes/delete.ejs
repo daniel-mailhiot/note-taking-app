@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head", { title }) %>
+</head>
+
+  <body>
+    <%- include("../partials/header", { title }) %>
+
+    <main class="container mt-4">
+      <h1 class="text-center mb-4"><%= title %></h1>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <section class="card border-danger shadow-sm">
+            <div class="card-body p-4">
+              <!-- Warning message -->
+              <div class="alert alert-danger" role="alert">
+                This action is permanent. The note cannot be recovered after deletion.
+              </div>
+
+              <!-- Show user exactly what they are deleting -->
+              <h2 class="h5 mb-2">Title: <%= note.title %></h2>
+              <p class="text-muted mb-4"><%= note.content %></p>
+
+              <!-- I think we mostly used GET/POST in class so I wanted to try using PUT/DELETE. -->
+              <!-- Not sure if what I've done here is the best approach, I did the same for edit.ejs -->
+              <form action="/notes/<%= note._id %>?_method=DELETE" method="POST" class="d-flex gap-2">
+
+                <button type="submit" class="btn btn-danger">
+                  <i class="bi bi-trash"></i> Yes, Delete Note
+                </button>
+
+                <a href="/notes" class="btn btn-outline-secondary">
+                  <i class="bi bi-arrow-left"></i> Cancel
+                </a>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <%- include("../partials/footer") %>
+
+
+<%- include("../partials/scripts") %>
+  </body>
+</html>

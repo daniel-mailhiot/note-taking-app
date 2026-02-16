@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head", { title }) %>
+</head>
+
+  <body>
+    <%- include("../partials/header", { title }) %>
+
+    <main class="container mt-4">
+      <h1 class="text-center mb-4"><%= title %></h1>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <section class="card shadow-sm">
+            <div class="card-body p-4">
+              <!-- I think we mostly used GET/POST in class so I wanted to try using PUT/DELETE. -->
+              <!-- Not sure if what I've done here is the best approach, I did the same for delete.ejs -->
+              <form action="/notes/<%= note._id %>?_method=PUT" method="POST">
+
+                <!-- Prefill title so user can edit existing data -->
+                <div class="mb-3">
+                  <label for="title" class="form-label">Title</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    maxlength="40"
+                    required
+                    value="<%= note.title %>"
+                  />
+                  <div class="form-text">Edit the note title (max 40 characters).</div>
+                </div>
+
+                <!-- Prefill content so user can edit existing note text -->
+                <div class="mb-3">
+                  <label for="content" class="form-label">Content</label>
+                  <textarea
+                    class="form-control"
+                    id="content"
+                    name="content"
+                    rows="6"
+                    maxlength="2000"
+                    required
+                  ><%= note.content %></textarea>
+                  <div class="form-text">Edit the note content (max 2000 characters).</div>
+                </div>
+
+                <!-- Submit update or go back without changes -->
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i> Update Note
+                  </button>
+                  <a href="/notes" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Cancel
+                  </a>
+                </div>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <%- include("../partials/footer") %>
+
+
+<%- include("../partials/scripts") %>
+  </body>
+</html>
