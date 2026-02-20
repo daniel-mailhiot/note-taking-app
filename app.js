@@ -5,6 +5,7 @@ import methodOverride from 'method-override';
 
 import { connectDB } from './config/db.js';
 import noteRoutes from './routes/noteRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(cors());
 
 // Routes
 app.use('/notes', noteRoutes);
+app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => { 
   res.redirect('/notes'); // redirect base URL to notes list page
