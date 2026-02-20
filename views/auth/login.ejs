@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head", { title }) %>
+</head>
+
+  <body>
+    <%- include("../partials/header", { title }) %>
+
+    <main class="container mt-4">
+      <h1 class="text-center mb-4"><%= title %></h1>
+
+      <!-- Show server-side error (example: invalid credentials) -->
+      <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <!-- Login form card -->
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <section class="card shadow-sm">
+            <div class="card-body p-4">
+              <form action="/auth/login" method="POST">
+
+                <!-- Username field -->
+                <div class="mb-3">
+                  <label for="username" class="form-label">Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    required
+                    value="<%= (formData && formData.username) || '' %>"
+                    placeholder="Enter your username"
+                  />
+                </div>
+
+                <!-- Password field -->
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                  />
+                </div>
+
+                <!-- Action buttons -->
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                  </button>
+                  <a href="/auth/register" class="btn btn-outline-secondary">
+                    <i class="bi bi-person-plus"></i> Register Instead
+                  </a>
+                </div>
+
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <%- include("../partials/footer") %>
+
+<%- include("../partials/scripts") %>
+  </body>
+</html>

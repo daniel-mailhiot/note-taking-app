@@ -23,7 +23,19 @@
           <li class="nav-item">
             <a class="nav-link" href="/notes/new">Create Note</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/register">Register</a>
+          </li>
         </ul>
+        <!-- Logout -->
+        <form action="/auth/logout" method="POST" class="d-flex">
+          <button type="submit" class="btn btn-outline-danger btn-sm">
+            Logout
+          </button>
+        </form>
       </div>
     </div>
   </nav>
