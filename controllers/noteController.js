@@ -2,7 +2,7 @@ import Note from '../models/Note.js';
 
 export async function listNotes(req, res) {
     try {
-        const all_notes = await Note.find({ userId: 'temp-user-id' }).sort({ createdAt: -1 }); // find all notes for the user and sort by creation date (newest first)
+        const all_notes = await Note.find({ userId: req.session.userId }).sort({ createdAt: -1 }); // find all notes for the user and sort by creation date (newest first)
         res.render('notes/index', { title: 'My Notes', notes: all_notes });
     } catch (error) {
         console.error('Error fetching notes:', error);
@@ -16,7 +16,7 @@ export async function createNewNote(req, res) {
         if (!title || !content) { // server-side validation: check to make sure both title and content are provided
             return res.status(400).send('Title and content are required');
         }
-        await Note.create({ title, content, userId: 'temp-user-id' });
+        await Note.create({ title, content, userId: req.session.userId });
         listNotes(req, res); // after creating a new note, fetch and display the updated list of notes
     } catch (error) {
         console.error('Error creating note:', error);
@@ -32,7 +32,7 @@ export async function updateNote(req, res) {
             return res.status(400).send('Title and content are required');
         }
         const updatedNote = await Note.findOneAndUpdate(
-            { _id: id, userId: 'temp-user-id' }, // find the note by id and userId to ensure users can only update their own notes
+            { _id: id, userId: req.session.userId }, // find the note by id and userId to ensure users can only update their own notes
             { title, content }, // update the note's title and content
         );
         if (!updatedNote) { // if no note was found with the given id and userId, return a 404 error
@@ -49,7 +49,7 @@ export async function deleteNote(req, res) {
     try {
         const { id } = req.params;
         const deletedNote = await Note.findOneAndDelete(
-            { _id: id, userId: 'temp-user-id' }
+            { _id: id, userId: req.session.userId }
         );
         if (!deletedNote) {
             return res.status(404).send('Note not found');
@@ -70,7 +70,7 @@ export async function redirectToEditNote(req, res) {
     try {
         const { id } = req.params;
         const note = await Note.findOne(
-            { _id: id, userId: 'temp-user-id' }
+            { _id: id, userId: req.session.userId }
         );
         if (!note) {
             return res.status(404).send('Note not found');
@@ -86,7 +86,7 @@ export async function redirectToDeleteNote(req, res) {
     try {
         const { id } = req.params;
         const note = await Note.findOne(
-            { _id: id, userId: 'temp-user-id' }
+            { _id: id, userId: req.session.userId }
         );
         if (!note) {
             return res.status(404).send('Note not found');
