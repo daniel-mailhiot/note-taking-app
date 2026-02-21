@@ -35,6 +35,16 @@
           <button type="submit" class="btn btn-outline-danger btn-sm">
             Logout
           </button>
+          <!-- Display logged-in username for testing -->
+        <% if (currentUsername) { %>
+          <span class="navbar-text me-2">
+            Logged in as: <strong><%= currentUsername %></strong>
+          </span>
+        <% } else { %>
+          <span class="navbar-text me-2 text-muted">
+            Not logged in
+          </span>
+        <% } %>
         </form>
       </div>
     </div>
