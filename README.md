@@ -1,26 +1,26 @@
-# Note-Taking App (In Progress)
+# Note-Taking App
 
 A full-stack note-taking web app built for a school assignment using Node.js, Express, MongoDB, and EJS.
 
-## Project Status
+## Current Features
 
-This project is currently **in progress**.
-
-- Core notes CRUD is implemented with server-rendered EJS pages
-- MongoDB + Mongoose integration is working
-- Authentication is not fully implemented yet (currently using a temporary user id in code)
-- README will be updated as features and milestones are completed
+- User registration, login, and logout
+- Password hashing with bcrypt
+- Session-based authentication
+- Notes stored in MongoDB using a Mongoose model
+- User-specific notes CRUD (create, read, update, delete)
+- Server-rendered UI with EJS partials and Bootstrap
 
 ## Assignment Goals
 
 This project is designed to practice:
 
 - Express.js server setup and route handling
-- CRUD operations for notes
-- MongoDB data modeling and persistence
+- REST-style notes endpoints (GET, POST, PUT, DELETE)
+- MongoDB + Mongoose data modeling and persistence
 - Front-end + back-end integration
 - Authentication and per-user data ownership
-- Validation, error handling, and documentation
+- Server-side validation and error handling
 
 ## Tech Stack
 
@@ -28,54 +28,50 @@ This project is designed to practice:
 - Express.js
 - MongoDB
 - Mongoose
-- EJS (with partials)
+- EJS
 - Bootstrap
+- express-session
+- bcrypt
 - method-override
 - dotenv
 - cors
-- bcrypt (planned for authentication)
-
-## Current Features
-
-- Create, read, update, and delete notes through EJS views
-- Notes stored in MongoDB using a Mongoose model
-- Basic server-side required-field validation
-- Shared EJS partials for reusable layout components
-- Method override support for PUT/DELETE form actions
-
-## Features In Progress
-
-- Real authentication flow (planned: local auth with bcrypt)
-- True per-user note isolation using authenticated user identity
-- More polished error feedback to users
 
 ## Project Structure
 
 ```text
 note-taking-app/
-├── app.js
 ├── config/
 │   └── db.js
 ├── controllers/
+│   ├── authController.js
 │   └── noteController.js
 ├── models/
-│   └── Note.js
-├── routes/
-│   └── noteRoutes.js
-├── views/
-│   ├── partials/
-│   │   ├── head.ejs
-│   │   ├── header.ejs
-│   │   ├── footer.ejs
-│   │   └── scripts.ejs
-│   ├── notes/
-│   │   ├── index.ejs
-│   │   ├── new.ejs
-│   │   ├── edit.ejs
-│   │   └── delete.ejs
-│   └── index.ejs
+│   ├── Note.js
+│   └── User.js
 ├── public/
 │   └── styles.css
+├── routes/
+│   ├── authRoutes.js
+│   └── noteRoutes.js
+├── views/
+│   ├── auth/
+│   │   ├── login.ejs
+│   │   └── register.ejs
+│   ├── notes/
+│   │   ├── delete.ejs
+│   │   ├── edit.ejs
+│   │   ├── index.ejs
+│   │   └── new.ejs
+│   └── partials/
+│       ├── footer.ejs
+│       ├── head.ejs
+│       ├── header.ejs
+│       └── scripts.ejs
+├── .env
+├── .gitattributes
+├── .gitignore
+├── app.js
+├── package-lock.json
 ├── package.json
 └── README.md
 ```
@@ -95,8 +91,21 @@ Run: `npm install`
 
 Create a `.env` file in the project root with:
 
-`PORT=3000`  
-`MONGO_URI=mongodb://127.0.0.1:27017/noteAppDB`
+```env
+# Express server port
+PORT=3000
+
+# Local MongoDB connection
+MONGO_URI=mongodb://127.0.0.1:27017/noteAppDB
+
+# Session cookie signing secret
+SESSION_SECRET=enter_a_random_session_secret_here
+
+# bcrypt hashing rounds
+BCRYPT_SALT_ROUNDS=10
+```
+
+For the `SESSION_SECRET` value, replace with any long random string.
 
 ### 4) Run the app
 
@@ -107,38 +116,78 @@ Standard mode: `npm start`
 
 `http://localhost:3000`
 
-## Current Routes (Server-rendered)
+## Routes
 
-| Method | Route | Purpose |
-|---|---|---|
-| GET | `/` | Redirect to notes list |
-| GET | `/notes` | Show all notes |
-| GET | `/notes/new` | Show create note form |
-| POST | `/notes` | Create note |
-| GET | `/notes/:id/edit` | Show edit form |
-| PUT | `/notes/:id` | Update note |
-| GET | `/notes/:id/delete` | Show delete confirmation |
-| DELETE | `/notes/:id` | Delete note |
+### Base Route
+
+| Method | Route | Auth Required | Behavior |
+|---|---|---|---|
+| GET | `/` | No | Redirects to `/notes` |
+
+### Auth Routes
+
+| Method | Route | Auth Required | Request Body | Success Response | Error Response |
+|---|---|---|---|---|---|
+| GET | `/auth/register` | No | None | Renders register page | 500 if rendering fails |
+| POST | `/auth/register` | No | `username`, `password` | Creates user, sets session, redirects to `/notes` | 400 (missing fields / short password), 409 (duplicate username), 500 |
+| GET | `/auth/login` | No | None | Renders login page | 500 if rendering fails |
+| POST | `/auth/login` | No | `username`, `password` | Sets session, redirects to `/notes` | 400 (missing fields), 401 (invalid credentials), 500 |
+| POST | `/auth/logout` | No (but only affects logged-in users) | None | Destroys session, clears cookie, redirects to `/auth/login` | 500 |
+
+### Notes Routes
+
+All `/notes` routes require login. If no session, user is redirected to `/auth/login`.
+
+| Method | Route | Auth Required | Request Body | Success Response | Error Response |
+|---|---|---|---|---|---|
+| GET | `/notes` | Yes | None | Renders notes list for logged-in user | 500 |
+| GET | `/notes/new` | Yes | None | Renders create form | 500 |
+| POST | `/notes` | Yes | `title`, `content` | Creates note for logged-in user, re-renders notes list | 400 (missing fields), 500 |
+| GET | `/notes/:id/edit` | Yes | None | Renders edit form for owned note | 404 (not found/not owned), 500 |
+| PUT | `/notes/:id` | Yes | `title`, `content` | Updates owned note, re-renders notes list | 400, 404, 500 |
+| GET | `/notes/:id/delete` | Yes | None | Renders delete confirmation for owned note | 404, 500 |
+| DELETE | `/notes/:id` | Yes | None | Deletes owned note, re-renders notes list | 404, 500 |
 
 
-## Known Limitations (Current Version)
+## Data Models
 
-- Authentication is incomplete
-- Hardcoded temporary user id is still used in note queries
-- README will be expanded as milestones are completed
-- There are probably bugs that need to be addressed as development continues
-- UI/UX design is a placeholder for now and will be improved in future versions
+### User Model (`models/User.js`)
 
-## Roadmap
+- `username`: String, required, unique, trim, min 3, max 30
+- `passwordHash`: String, required
+- `timestamps`: enabled (`createdAt`, `updatedAt`)
 
-Done:
-- Express app and MongoDB connection
-- Notes model and CRUD controllers
-- EJS pages with partials
+### Note Model (`models/Note.js`)
 
-TODO:
-- Authentication (local auth + bcrypt)
-- Per-user authorization checks
-- Validation and error handling improvements
-- Testing, bug fixes, polish
-- UI/UX improvements (current is temporary), css styling
+- `title`: String, required, trim, max 40
+- `content`: String, required, trim, max 2000
+- `userId`: String, required (stores owner user id)
+- `timestamps`: enabled (`createdAt`, `updatedAt`)
+
+## Validation and Error Handling
+
+- Server-side required-field validation is handled in the auth and note controllers.
+- Password minimum length is enforced during registration.
+- Duplicate usernames return HTTP `409 Conflict`.
+- Invalid login credentials return HTTP `401 Unauthorized`.
+- Missing note fields return HTTP `400 Bad Request`.
+- Unauthorized note access is prevented by filtering queries with both `_id` and `userId`.
+- Missing/non-owned notes return HTTP `404 Not Found`.
+- Server/database failures return HTTP `500 Internal Server Error`.
+
+## Authentication and Authorization
+
+- Authentication uses `express-session`.
+- Passwords are hashed with bcrypt before storage.
+- `req.session.userId` and `req.session.username` are stored on login/register.
+- Notes routes are protected by middleware (`requireAuth`).
+- Each note query is scoped to the logged-in user to prevent cross-user access.
+
+## Front-End Notes
+
+Front-end is currently **in progress**, I have a basic but functional UI for now but plan to update UI/UX next. The current version includes:
+
+- Views rendered using EJS templates
+- Reusable layout sections handled with EJS partials
+- Bootstrap for layout and components
+- `method-override` enables PUT/DELETE from HTML forms via (`?_method=PUT`, `?_method=DELETE`)
