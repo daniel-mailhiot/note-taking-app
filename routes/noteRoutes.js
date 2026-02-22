@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 import {
   listNotes,
   createNewNote,
@@ -7,7 +7,7 @@ import {
   redirectToNewNote,
   redirectToEditNote,
   redirectToDeleteNote
-} from "../controllers/noteController.js";
+} from '../controllers/noteController.js';
 
 const router = express.Router();
 
@@ -21,11 +21,13 @@ function requireAuth(req, res, next) {
 
 router.use(requireAuth); // apply authentication middleware to all routes below this line
 
+// Render notes pages
 router.get('/', listNotes);
 router.get('/new', redirectToNewNote);
 router.get('/:id/edit', redirectToEditNote);
 router.get('/:id/delete', redirectToDeleteNote);
 
+// Handle note form submissions
 router.post('/', createNewNote);
 router.put('/:id', updateNote);
 router.delete('/:id', deleteNote);

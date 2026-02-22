@@ -1,20 +1,18 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 
-// Show register page
+// Render register page
 export function showRegisterPage(req, res) {
-    res.render('auth/register', {
+    return res.render('auth/register', {
         title: 'Register',
         error: null,
-        formData: {
-            username: '',
-        }
+        formData: { username: '' }
     });
 }
 
-// Show login page
+// Render login page
 export function showLoginPage(req, res) {
-    res.render('auth/login', {
+    return res.render('auth/login', {
         title: 'Login',
         error: null,
         formData: { username: '' }
@@ -27,7 +25,7 @@ export async function registerUser(req, res) {
         const username = req.body.username.trim();
         const password = req.body.password;
 
-        // Server-side input validation
+        // Server-side validation: check for required fields and password length
         if (!username || !password) {
             return res.status(400).render('auth/register', {
                 title: 'Register',
@@ -35,7 +33,6 @@ export async function registerUser(req, res) {
                 formData: { username }
             });
         }
-
         if (password.length < 6) {
             return res.status(400).render('auth/register', {
                 title: 'Register',
@@ -58,7 +55,7 @@ export async function registerUser(req, res) {
         const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS) || 10; // read salt rounds from env, default to 10
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
-        const newUser =  await User.create({
+        const newUser = await User.create({
             username,
             passwordHash
         });
@@ -67,16 +64,16 @@ export async function registerUser(req, res) {
         req.session.userId = newUser._id.toString();
         req.session.username = newUser.username;
 
-        return res.redirect('/notes'); 
-        } catch (error) {
-            console.error('Error registering user:', error);
-            return res.status(500).render('auth/register', {
-                title: 'Register',
-                error: 'Something went wrong while creating your account.',
-                formData: { username: req.body.username.trim() || '' }
-            });
-        }
+        return res.redirect('/notes');
+    } catch (error) {
+        console.error('Error registering user:', error);
+        return res.status(500).render('auth/register', {
+            title: 'Register',
+            error: 'Something went wrong while creating your account.',
+            formData: { username: req.body.username.trim() || '' }
+        });
     }
+}
 
 // Handle login form submission
 export async function loginUser(req, res) {
@@ -115,13 +112,13 @@ export async function loginUser(req, res) {
         req.session.username = user.username;
 
         return res.redirect('/notes');
-        } catch (error) {
-            console.error('Error logging in user:', error);
-            return res.status(500).render('auth/login', {
-                title: 'Login',
-                error: 'Something went wrong while logging in.',
-                formData: { username: req.body.username.trim() || '' }
-            });
+    } catch (error) {
+        console.error('Error logging in user:', error);
+        return res.status(500).render('auth/login', {
+            title: 'Login',
+            error: 'Something went wrong while logging in.',
+            formData: { username: req.body.username.trim() || '' }
+        });
     }
 }
 

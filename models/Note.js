@@ -13,7 +13,7 @@ const noteSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    userId: { // will be used to link the note to a user
+    userId: { // used to link the note to a user
         type: String,
         required: true
     }

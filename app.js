@@ -22,7 +22,8 @@ app.use(methodOverride('_method'));
 app.use(express.static('public'));
 app.use(cors());
 
-app.use( // enable req.session in controllers
+// Session middleware: enable req.session in controllers
+app.use(
   session({
     secret: process.env.SESSION_SECRET, // secret used to sign the session cookie
     resave: false, // don't save session if nothing changed
@@ -30,7 +31,8 @@ app.use( // enable req.session in controllers
   })
 );
 
-app.use((req, res, next) => { // make logged-in username available in all views for testing
+// Make logged-in username available in all views (for testing)
+app.use((req, res, next) => { 
   res.locals.currentUsername = req.session.username || null;
   next();
 });
