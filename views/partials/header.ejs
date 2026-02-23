@@ -1,50 +1,43 @@
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg bg-white py-3 px-4 shadow-none" style="border-bottom: 2px solid #000;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/notes">Notes App</a>
+      <a class="navbar-brand fw-bold fs-3 text-uppercase" style="letter-spacing: 1px;" href="/notes">Notes App</a>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler flat-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav me-4 gap-3 align-items-center">
           <li class="nav-item">
-            <a class="nav-link" href="/notes">All Notes</a>
+            <a class="nav-link fw-semibold text-dark fs-5" href="/notes">All Notes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/notes/new">Create Note</a>
+            <a class="nav-link fw-semibold text-dark fs-5" href="/notes/new">Create Note</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/auth/login">Login</a>
+            <a class="nav-link fw-semibold text-dark fs-5" href="/auth/login">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/auth/register">Register</a>
+            <a class="nav-link fw-semibold text-dark fs-5" href="/auth/register">Register</a>
           </li>
         </ul>
-        <!-- Logout -->
-        <form action="/auth/logout" method="POST" class="d-flex">
-          <button type="submit" class="btn btn-outline-danger btn-sm">
-            Logout
-          </button>
-          <!-- Display logged-in username for testing -->
-        <% if (currentUsername) { %>
-          <span class="navbar-text me-2">
-            Logged in as: <strong><%= currentUsername %></strong>
-          </span>
-        <% } else { %>
-          <span class="navbar-text me-2 text-muted">
-            Not logged in
-          </span>
-        <% } %>
+
+        <!-- Logout / Username display for testing -->
+        <form action="/auth/logout" method="POST" class="d-flex align-items-center m-0">
+          <% if (currentUsername) { %>
+            <span class="navbar-text me-3 text-dark fw-bold border border-2 border-dark px-3 py-1 bg-light">
+              <%= currentUsername %>
+            </span>
+            <% } else { %>
+              <span class="navbar-text me-3 text-muted text-uppercase fw-bold" style="font-size: 0.8rem;">
+                Not logged in
+              </span>
+              <% } %>
+                <button type="submit" class="btn btn-outline-danger fw-bold px-4 py-2 text-uppercase">
+                  Logout
+                </button>
         </form>
       </div>
     </div>
