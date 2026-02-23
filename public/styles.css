@@ -31,7 +31,14 @@ body {
     box-shadow: none;
 }
 
-/* Hover effects */
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Hover and Active effects */
 .btn-primary {
     background-color: #000;
     color: #fff;
@@ -39,21 +46,40 @@ body {
     transition: all var(--transition-speed) ease;
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary.active {
     background-color: #fff;
     color: #000;
     border-color: #000;
 }
 
 .btn-outline-danger {
-    color: #000;
-    border-color: #000;
+    color: #dc3545;
+    border-color: #dc3545;
     transition: all var(--transition-speed) ease;
 }
 
-.btn-outline-danger:hover {
-    background-color: #000;
+.btn-outline-danger:hover,
+.btn-outline-danger:active,
+.btn-outline-danger.active {
+    background-color: #dc3545;
     color: #fff;
+    border-color: #dc3545;
+}
+
+.btn-outline-warning {
+    color: #d39e00;
+    border-color: #d39e00;
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-outline-warning:hover,
+.btn-outline-warning:active,
+.btn-outline-warning.active {
+    background-color: #d39e00;
+    color: #fff;
+    border-color: #d39e00;
 }
 
 .btn-outline-secondary {
@@ -63,8 +89,12 @@ body {
     background-color: transparent;
 }
 
-.btn-outline-secondary:hover {
+.btn-outline-secondary:hover,
+.btn-outline-secondary:active,
+.btn-outline-secondary.active {
     background-color: #f8f9fa;
+    color: #000;
+    border-color: #000;
 }
 
 .card {
