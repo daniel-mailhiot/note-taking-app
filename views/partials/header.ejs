@@ -1,44 +1,49 @@
 <header>
-  <nav class="navbar navbar-expand-lg bg-white py-3 px-4 shadow-none" style="border-bottom: 2px solid #000;">
+  <nav class="navbar navbar-expand-lg bg-white py-2 px-3 shadow-none" style="border-bottom: 2px solid #000;">
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold fs-3 text-uppercase" style="letter-spacing: 1px;" href="/notes">Notes App</a>
+      <a class="navbar-brand fw-bold fs-4 text-uppercase" style="letter-spacing: 1px;" href="/notes">Notes App</a>
 
       <button class="navbar-toggler flat-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav me-4 gap-3 align-items-center">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left-aligned links -->
+        <ul class="navbar-nav me-auto gap-2 align-items-center ms-lg-4">
           <li class="nav-item">
-            <a class="nav-link fw-semibold text-dark fs-5" href="/notes">All Notes</a>
+            <a class="nav-link fw-semibold text-dark fs-6" href="/notes">All Notes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold text-dark fs-5" href="/notes/new">Create Note</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold text-dark fs-5" href="/auth/login">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold text-dark fs-5" href="/auth/register">Register</a>
+            <a class="nav-link fw-semibold text-dark fs-6" href="/notes/new">Create Note</a>
           </li>
         </ul>
 
-        <!-- Logout / Username display for testing -->
-        <form action="/auth/logout" method="POST" class="d-flex align-items-center m-0">
+        <!-- Right-aligned links and auth -->
+        <div class="d-flex align-items-center gap-2">
           <% if (currentUsername) { %>
-            <span class="navbar-text me-3 text-dark fw-bold border border-2 border-dark px-3 py-1 bg-light">
-              <%= currentUsername %>
-            </span>
+            <form action="/auth/logout" method="POST" class="d-flex align-items-center m-0">
+              <span class="navbar-text me-3 text-dark fw-bold border border-2 border-dark px-2 py-1 fs-6 bg-light">
+                <%= currentUsername %>
+              </span>
+              <button type="submit" class="btn btn-outline-danger btn-sm fw-bold px-3 py-1 text-uppercase">
+                Logout
+              </button>
+            </form>
             <% } else { %>
-              <span class="navbar-text me-3 text-muted text-uppercase fw-bold" style="font-size: 0.8rem;">
+              <span class="navbar-text me-3 text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">
                 Not logged in
               </span>
+              <ul class="navbar-nav gap-2 align-items-center">
+                <li class="nav-item">
+                  <a class="nav-link fw-semibold text-dark fs-6" href="/auth/login">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link fw-semibold text-dark fs-6" href="/auth/register">Register</a>
+                </li>
+              </ul>
               <% } %>
-                <button type="submit" class="btn btn-outline-danger fw-bold px-4 py-2 text-uppercase">
-                  Logout
-                </button>
-        </form>
+        </div>
       </div>
     </div>
   </nav>

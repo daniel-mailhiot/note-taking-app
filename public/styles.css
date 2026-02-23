@@ -15,6 +15,15 @@ body {
     letter-spacing: 0.01em;
     background-color: #fff;
     color: #000;
+
+    /* Layout for sticky footer */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 /* Reset border-radius */
@@ -39,20 +48,6 @@ body {
 }
 
 /* Hover and Active effects */
-.btn-primary {
-    background-color: #000;
-    color: #fff;
-    border-color: #000;
-    transition: all var(--transition-speed) ease;
-}
-
-.btn-primary:hover,
-.btn-primary:active,
-.btn-primary.active {
-    background-color: #fff;
-    color: #000;
-    border-color: #000;
-}
 
 .btn-outline-danger {
     color: #dc3545;
