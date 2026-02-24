@@ -193,6 +193,7 @@ All `/notes` routes require login. If no session, user is redirected to `/auth/l
 ## Plan to implement
 - Create middleware folder to better organize middleware logic (eg, auth middleware currently mixed into route file)
 - Add ability to view and read notes individually (currently can only view all notes from dashboard)
+- Add dark mode toggle
 - More testing is needed for edge cases and bugs
 
 ## Known issues
