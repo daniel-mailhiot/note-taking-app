@@ -11,9 +11,9 @@ A full-stack note-taking web app built for a school assignment using Node.js, Ex
 - User-specific notes CRUD (create, read, update, delete)
 - Server-rendered UI with EJS partials and Bootstrap
 
-## Assignment Goals
+## Project Goals
 
-This project is designed to practice:
+This project implements:
 
 - Express.js server setup and route handling
 - REST-style notes endpoints (GET, POST, PUT, DELETE)
@@ -146,7 +146,7 @@ All `/notes` routes require login. If no session, user is redirected to `/auth/l
 | GET | `/notes/:id/edit` | Yes | None | Renders edit form for owned note | 404 (not found/not owned), 500 |
 | PUT | `/notes/:id` | Yes | `title`, `content` | Updates owned note, re-renders notes list | 400, 404, 500 |
 | GET | `/notes/:id/delete` | Yes | None | Renders delete confirmation for owned note | 404, 500 |
-| DELETE | `/notes/:id` | Yes | None | Deletes owned note, re-renders notes list | 404, 500 |
+| DELETE | `/notes/:id` | Yes | None | Deletes owned note, redirects to `/notes` | 404, 500 |
 
 
 ## Data Models
@@ -180,14 +180,20 @@ All `/notes` routes require login. If no session, user is redirected to `/auth/l
 - Authentication uses `express-session`.
 - Passwords are hashed with bcrypt before storage.
 - `req.session.userId` and `req.session.username` are stored on login/register.
-- Notes routes are protected by middleware (`requireAuth`).
-- Each note query is scoped to the logged-in user to prevent cross-user access.
+- Notes routes are protected by middleware (`requireAuth` in `routes/noteRoutes.js:`).
+- Each note query is scoped to the logged-in user to prevent cross-user access. ({ _id: id, userId: req.session.userId })
 
-## Front-End Notes
-
-Front-end is currently **in progress**, I have a basic but functional UI for now but plan to update UI/UX next. The current version includes:
+## Front-End
 
 - Views rendered using EJS templates
 - Reusable layout sections handled with EJS partials
 - Bootstrap for layout and components
 - `method-override` enables PUT/DELETE from HTML forms via (`?_method=PUT`, `?_method=DELETE`)
+
+## Plan to implement
+- Create middleware folder to better organize middleware logic (eg, auth middleware currently mixed into route file)
+- Add ability to view and read notes individually (currently can only view all notes from dashboard)
+- More testing is needed for edge cases and bugs
+
+## Known issues
+- Refreshing the page after creating a note causes the note to duplicate

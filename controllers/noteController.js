@@ -85,7 +85,7 @@ export async function deleteNote(req, res) {
             return res.status(404).send('Note not found');
         }
 
-        return listNotes(req, res);
+        return res.redirect('/notes');
     } catch (error) {
         console.error('Error deleting note:', error);
         return res.status(500).send('Failed to delete note');
